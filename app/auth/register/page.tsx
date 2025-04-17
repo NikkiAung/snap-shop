@@ -17,20 +17,24 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { useAction } from "next-safe-action/hooks";
+import { register } from "@/server/actions/register-action";
+import { cn } from "@/lib/utils";
 
 const RegisterPage = () => {
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
+      username: "",
       email: "",
       password: "",
     },
   });
-
+  const { execute, status, result } = useAction(register);
   function onSubmit(values: z.infer<typeof registerSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+    const { username, email, password } = values;
+    console.log({ username, email, password });
+    execute({ username, email, password });
   }
   return (
     <AuthForm
@@ -85,7 +89,14 @@ const RegisterPage = () => {
               <Link href={"/auth/reset"}>Forgot password</Link>
             </Button>
           </div>
-          <Button className="w-full mb-4">Register</Button>
+          <Button
+            className={cn(
+              "w-full mb-4",
+              status === "executing" && "animate-pulse"
+            )}
+          >
+            Register
+          </Button>
         </form>
       </Form>
     </AuthForm>

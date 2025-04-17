@@ -17,6 +17,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { useAction } from "next-safe-action/hooks";
+import { login } from "@/server/actions/login-action";
+import { cn } from "@/lib/utils";
 
 const LoginPage = () => {
   const form = useForm<z.infer<typeof loginSchema>>({
@@ -27,10 +30,12 @@ const LoginPage = () => {
     },
   });
 
+  const { execute, status } = useAction(login);
+
   function onSubmit(values: z.infer<typeof loginSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+    const { email, password } = values;
+    console.log({ email, password });
+    execute({ email, password });
   }
   return (
     <AuthForm
@@ -62,7 +67,7 @@ const LoginPage = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input placeholder="******" {...field} />
+                    <Input type="password" placeholder="******" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -72,7 +77,14 @@ const LoginPage = () => {
               <Link href={"/auth/reset"}>Forgot password</Link>
             </Button>
           </div>
-          <Button className="w-full mb-4">Login</Button>
+          <Button
+            className={cn(
+              "w-full mb-4",
+              status === "executing" && "animate-pulse"
+            )}
+          >
+            Login
+          </Button>
         </form>
       </Form>
     </AuthForm>
