@@ -8,7 +8,7 @@ type AuthFooterProps = {
 };
 const AuthFooter = ({ footerLabel, footerHref }: AuthFooterProps) => {
   return (
-    <Button variant={"link"} asChild>
+    <Button variant={"link"} asChild className="w-full">
       <Link href={footerHref}>{footerLabel}</Link>
     </Button>
   );
