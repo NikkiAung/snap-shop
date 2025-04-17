@@ -1,7 +1,8 @@
+import { ShoppingBasket } from "lucide-react";
 const NavLogo = () => {
   return (
     <div>
-      <h1 className="font-bold text-3xl text-green-500">SnapShop</h1>
+      <ShoppingBasket size={44} className="text-green-500" />
     </div>
   );
 };
