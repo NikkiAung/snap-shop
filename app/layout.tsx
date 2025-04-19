@@ -30,7 +30,7 @@ export default function RootLayout({
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <AppNav />
           <section>{children}</section>
-          <Toaster position="top-center" richColors />
+          <Toaster position="top-center" richColors closeButton />
         </div>
       </body>
     </html>
