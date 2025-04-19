@@ -20,6 +20,7 @@ import Link from "next/link";
 import { useAction } from "next-safe-action/hooks";
 import { register } from "@/server/actions/register-action";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 const RegisterPage = () => {
   const form = useForm<z.infer<typeof registerSchema>>({
@@ -30,7 +31,19 @@ const RegisterPage = () => {
       password: "",
     },
   });
-  const { execute, status, result } = useAction(register);
+  const { execute, status, result } = useAction(register, {
+    onSuccess: ({ data }) => {
+      form.reset();
+      toast.success(data?.success, {
+        action: {
+          label: "Open Gmail",
+          onClick: () => {
+            window.open("https://mail.google.com", "_blank");
+          },
+        },
+      });
+    },
+  });
   function onSubmit(values: z.infer<typeof registerSchema>) {
     const { username, email, password } = values;
     console.log({ username, email, password });
@@ -79,7 +92,7 @@ const RegisterPage = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input placeholder="******" {...field} />
+                    <Input placeholder="******" {...field} type="password" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
