@@ -6,12 +6,12 @@ import bcrypt from "bcrypt";
 import { db } from "..";
 import { eq } from "drizzle-orm";
 import { users } from "../schema";
+import { generateEmailVericificationToken } from "./token";
 
 export const register = actionClient
   .schema(registerSchema)
   .action(async ({ parsedInput: { username, email, password } }) => {
     const hashedPassword = await bcrypt.hash(password, 10);
-    console.log(hashedPassword);
     // check user exist
     const existingUser = await db.query.users.findFirst({
       where: eq(users.email, email),
@@ -19,14 +19,24 @@ export const register = actionClient
 
     if (existingUser) {
       if (!existingUser.emailVerified) {
-        // send verification email
+        // generate verification token for email expxires in 30 minutes
+        const verificationToken = await generateEmailVericificationToken(email);
 
-        return { success: "Email verification sent" };
+        return { success: "Email verification resent" };
       }
       return { error: "Email is already exists." };
     }
 
-    // create user
+    // record user
+    await db.insert(users).values({
+      name: username,
+      email,
+      password: hashedPassword,
+    });
+
+    // generate verification token for email expxires in 30 minutes
+    const verificationToken = await generateEmailVericificationToken(email);
     // send verification email
-    return { success: "Email verification sent to your email." };
+    console.log(verificationToken);
+    return { success: "Email verification sent" };
   });
