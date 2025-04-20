@@ -7,6 +7,7 @@ import { db } from "..";
 import { eq } from "drizzle-orm";
 import { users } from "../schema";
 import { generateEmailVericificationToken } from "./token";
+import { sendEmail } from "./email";
 
 export const register = actionClient
   .schema(registerSchema)
@@ -21,6 +22,12 @@ export const register = actionClient
       if (!existingUser.emailVerified) {
         // generate verification token for email expxires in 30 minutes
         const verificationToken = await generateEmailVericificationToken(email);
+
+        await sendEmail(
+          verificationToken[0].email,
+          verificationToken[0].token,
+          username.slice(0, 5)
+        );
 
         return { success: "Email verification resent" };
       }
@@ -37,6 +44,10 @@ export const register = actionClient
     // generate verification token for email expxires in 30 minutes
     const verificationToken = await generateEmailVericificationToken(email);
     // send verification email
-    console.log(verificationToken);
+    await sendEmail(
+      verificationToken[0].email,
+      verificationToken[0].token,
+      username.slice(0, 5)
+    );
     return { success: "Email verification sent" };
   });
