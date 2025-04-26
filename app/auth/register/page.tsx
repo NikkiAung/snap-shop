@@ -33,15 +33,21 @@ const RegisterPage = () => {
   });
   const { execute, status, result } = useAction(register, {
     onSuccess: ({ data }) => {
+      console.log(data);
       form.reset();
-      toast.success(data?.success, {
-        action: {
-          label: "Open Gmail",
-          onClick: () => {
-            window.open("https://mail.google.com", "_blank");
+      if (data?.error) {
+        toast.error(data?.error);
+      }
+      if (data?.success) {
+        toast.success(data?.success, {
+          action: {
+            label: "Open Gmail",
+            onClick: () => {
+              window.open("https://mail.google.com", "_blank");
+            },
           },
-        },
-      });
+        });
+      }
     },
   });
   function onSubmit(values: z.infer<typeof registerSchema>) {
@@ -107,6 +113,7 @@ const RegisterPage = () => {
               "w-full mb-4",
               status === "executing" && "animate-pulse"
             )}
+            disabled={status === "executing"}
           >
             Register
           </Button>

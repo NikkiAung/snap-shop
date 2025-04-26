@@ -62,13 +62,18 @@ export const confirmEmailWithToken = async (token: string) => {
 
   if (isExpired) return { error: "Token expired" };
 
+  const existingUser = await db.query.users.findFirst({
+    where: eq(users.email, existingToken.email),
+  });
+  if (!existingUser) return { error: "User not found" };
+
   await db
     .update(users)
     .set({
       emailVerified: new Date(),
       email: existingToken.email,
     })
-    .where(eq(users.id, existingToken.id));
+    .where(eq(users.id, existingUser.id));
 
   await db
     .delete(emailVerificationToken)
