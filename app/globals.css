@@ -118,3 +118,10 @@
     @apply bg-background text-foreground;
   }
 }
+
+body[data-scroll-locked].mx-auto {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 1.5rem /* 24px */;
+  padding-right: 1.5rem /* 24px */;
+}
