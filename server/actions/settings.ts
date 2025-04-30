@@ -6,8 +6,16 @@ import { eq } from "drizzle-orm";
 import { users } from "../schema";
 import { settingSchema } from "@/types/settings-schema";
 
-export const register = actionClient
+export const updateDisplayName = actionClient
   .schema(settingSchema)
   .action(async ({ parsedInput: { username, email } }) => {
-    return { success: "Name is changed successfully" };
+    const existingUser = await db.query.users.findFirst({
+      where: eq(users.email, email),
+    });
+    if (!existingUser) return { error: "User doesn't exist" };
+    await db
+      .update(users)
+      .set({ name: username })
+      .where(eq(users.email, email));
+    return { success: "Display name updated!" };
   });

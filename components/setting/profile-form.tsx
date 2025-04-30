@@ -22,9 +22,10 @@ import { settingSchema } from "@/types/settings-schema";
 type ProfileFormProps = {
   username: string;
   email: string;
+  isDesktop: boolean;
 };
 
-const ProfileForm = ({ username, email }: ProfileFormProps) => {
+const ProfileForm = ({ username, email, isDesktop }: ProfileFormProps) => {
   const form = useForm({
     resolver: zodResolver(settingSchema),
     defaultValues: {
@@ -36,12 +37,12 @@ const ProfileForm = ({ username, email }: ProfileFormProps) => {
   const { execute, status, result } = useAction(updateDisplayName, {
     onSuccess({ data }) {
       form.reset();
-      //   if (data?.error) {
-      //     toast.error(data?.error);
-      //   }
-      //   if (data?.success) {
-      //     toast.success(data?.success);
-      //   }
+      if (data?.error) {
+        toast.error(data?.error);
+      }
+      if (data?.success) {
+        toast.success(data?.success);
+      }
     },
   });
 
@@ -57,7 +58,7 @@ const ProfileForm = ({ username, email }: ProfileFormProps) => {
           className="space-y-4 px-4 lg:px-0"
         >
           <FormField
-            username="name"
+            name="username"
             control={form.control}
             render={({ field }) => (
               <FormItem>
@@ -71,8 +72,9 @@ const ProfileForm = ({ username, email }: ProfileFormProps) => {
           />
           <Button
             className={cn(
-              "w-full mb-4",
-              status === "executing" && "animate-pulse"
+              "w-full",
+              status === "executing" && "animate-pulse",
+              !isDesktop && "mb-4"
             )}
             disabled={status === "executing"}
           >

@@ -29,13 +29,13 @@ import { Button } from "../ui/button";
 import SettingsCard from "./setting-card";
 import { useMediaQuery } from "../hooks/useMediaQuery";
 import { DialogClose } from "@radix-ui/react-dialog";
+import ProfileForm from "./profile-form";
 
 type ProfileCardProps = {
   session: Session;
 };
 const ProfileCard = ({ session }: ProfileCardProps) => {
   const isDesktop = useMediaQuery("(min-width: 768px)");
-  console.log(isDesktop);
 
   return (
     <SettingsCard>
@@ -66,11 +66,16 @@ const ProfileCard = ({ session }: ProfileCardProps) => {
                   This will be your public display name
                 </DialogDescription>
               </DialogHeader>
-              <DialogFooter>
-                <DialogClose asChild>
-                  <Button variant="outline">Cancel</Button>
-                </DialogClose>
-              </DialogFooter>
+              <ProfileForm
+                username={session?.user?.name!}
+                email={session?.user?.email!}
+                isDesktop={isDesktop}
+              />
+              <DialogClose asChild>
+                <Button variant="outline" className="w-full">
+                  Cancel
+                </Button>
+              </DialogClose>
             </DialogContent>
           </Dialog>
         ) : (
@@ -85,11 +90,16 @@ const ProfileCard = ({ session }: ProfileCardProps) => {
                   This will be your public display name
                 </DrawerDescription>
               </DrawerHeader>
-              <DrawerFooter>
-                <DrawerClose>
-                  <Button variant="outline">Cancel</Button>
-                </DrawerClose>
-              </DrawerFooter>
+              <ProfileForm
+                username={session?.user?.name!}
+                email={session?.user?.email!}
+                isDesktop={isDesktop}
+              />
+              <DrawerClose>
+                <Button variant="outline" className="w-full mb-4">
+                  Cancel
+                </Button>
+              </DrawerClose>
             </DrawerContent>
           </Drawer>
         )}
