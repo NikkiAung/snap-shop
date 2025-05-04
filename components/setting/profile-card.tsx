@@ -1,6 +1,6 @@
 "use client";
 import { Session } from "next-auth";
-import React from "react";
+import React, { useState } from "react";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { AvatarImage } from "@radix-ui/react-avatar";
 import { UserRoundPen } from "lucide-react";
@@ -35,8 +35,11 @@ type ProfileCardProps = {
   session: Session;
 };
 const ProfileCard = ({ session }: ProfileCardProps) => {
+  const [open, setOpen] = useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
-
+  const handleOpen = () => {
+    setOpen(false);
+  };
   return (
     <SettingsCard>
       <div className="flex items-start gap-2 justify-between">
@@ -55,7 +58,7 @@ const ProfileCard = ({ session }: ProfileCardProps) => {
           </div>
         </div>
         {isDesktop ? (
-          <Dialog>
+          <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
               <UserRoundPen className="w-5 h-5 text-muted-foreground hover:text-black cursor-pointer" />
             </DialogTrigger>
@@ -70,6 +73,7 @@ const ProfileCard = ({ session }: ProfileCardProps) => {
                 username={session?.user?.name!}
                 email={session?.user?.email!}
                 isDesktop={isDesktop}
+                handleOpen={handleOpen}
               />
               <DialogClose asChild>
                 <Button variant="outline" className="w-full">
@@ -94,6 +98,7 @@ const ProfileCard = ({ session }: ProfileCardProps) => {
                 username={session?.user?.name!}
                 email={session?.user?.email!}
                 isDesktop={isDesktop}
+                handleOpen={handleOpen}
               />
               <DrawerClose>
                 <Button variant="outline" className="w-full mb-4">

@@ -23,9 +23,15 @@ type ProfileFormProps = {
   username: string;
   email: string;
   isDesktop: boolean;
+  handleOpen: () => void;
 };
 
-const ProfileForm = ({ username, email, isDesktop }: ProfileFormProps) => {
+const ProfileForm = ({
+  username,
+  email,
+  isDesktop,
+  handleOpen,
+}: ProfileFormProps) => {
   const form = useForm({
     resolver: zodResolver(settingSchema),
     defaultValues: {
@@ -41,6 +47,7 @@ const ProfileForm = ({ username, email, isDesktop }: ProfileFormProps) => {
         toast.error(data?.error);
       }
       if (data?.success) {
+        handleOpen();
         toast.success(data?.success);
       }
     },
