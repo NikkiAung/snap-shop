@@ -5,7 +5,7 @@ import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
 import { loginSchema } from "@/types/login-schema";
-import { users } from "./schema";
+import { accounts, users } from "./schema";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcrypt";
 
