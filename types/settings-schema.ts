@@ -6,3 +6,8 @@ export const settingSchema = z.object({
   }),
   email: z.string(),
 });
+
+export const twoFactorAuthSchema = z.object({
+  isTwoFactorEnabled: z.boolean(),
+  email: z.string(),
+});

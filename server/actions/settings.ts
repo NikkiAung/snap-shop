@@ -4,7 +4,7 @@ import { actionClient } from "./safe-action";
 import { db } from "..";
 import { eq } from "drizzle-orm";
 import { users } from "../schema";
-import { settingSchema } from "@/types/settings-schema";
+import { settingSchema, twoFactorAuthSchema } from "@/types/settings-schema";
 import { revalidatePath } from "next/cache";
 
 export const updateDisplayName = actionClient
@@ -20,4 +20,21 @@ export const updateDisplayName = actionClient
       .where(eq(users.email, email));
     revalidatePath("/dashboard/settings");
     return { success: "Display name updated!" };
+  });
+
+export const twoFactorToogler = actionClient
+  .schema(twoFactorAuthSchema)
+  .action(async ({ parsedInput: { isTwoFactorEnabled, email } }) => {
+    const existingUser = await db.query.users.findFirst({
+      where: eq(users.email, email),
+    });
+    if (!existingUser) return { error: "Some went wrong" };
+
+    await db
+      .update(users)
+      .set({ isTwoFactorEnabled })
+      .where(eq(users.email, email));
+    revalidatePath("/dashboard/settings");
+
+    return { success: "2FA Setting Saved" };
   });
