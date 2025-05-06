@@ -57,7 +57,7 @@ const TwoFactor = ({ email, isTwoFactorEnabled }: TwoFactorProps) => {
 
   return (
     <Form {...form}>
-      <div className="flex items-center justify-between">
+      <div className=" items-center w-full">
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <FormField
             name="isTwoFactorEnabled"
