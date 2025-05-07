@@ -4,7 +4,11 @@ import { actionClient } from "./safe-action";
 import { db } from "..";
 import { eq } from "drizzle-orm";
 import { users } from "../schema";
-import { settingSchema, twoFactorAuthSchema } from "@/types/settings-schema";
+import {
+  avatarSchema,
+  settingSchema,
+  twoFactorAuthSchema,
+} from "@/types/settings-schema";
 import { revalidatePath } from "next/cache";
 
 export const updateDisplayName = actionClient
@@ -37,4 +41,18 @@ export const twoFactorToogler = actionClient
     revalidatePath("/dashboard/settings");
 
     return { success: "2FA Setting Saved" };
+  });
+
+export const profileAvatarUpdate = actionClient
+  .schema(avatarSchema)
+  .action(async ({ parsedInput: { image, email } }) => {
+    const existingUser = await db.query.users.findFirst({
+      where: eq(users.email, email),
+    });
+
+    if (!existingUser) return { error: "Some went wrong" };
+
+    await db.update(users).set({ image }).where(eq(users.email, email));
+    revalidatePath("/dashboard/settings");
+    return { success: "Profile Updated" };
   });

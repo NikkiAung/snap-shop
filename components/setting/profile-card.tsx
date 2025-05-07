@@ -30,6 +30,7 @@ import SettingsCard from "./setting-card";
 import { useMediaQuery } from "../hooks/useMediaQuery";
 import { DialogClose } from "@radix-ui/react-dialog";
 import ProfileForm from "./profile-form";
+import AvatarUploadForm from "./avatar-upload-form";
 
 type ProfileCardProps = {
   session: Session;
@@ -44,12 +45,11 @@ const ProfileCard = ({ session }: ProfileCardProps) => {
     <SettingsCard>
       <div className="flex items-start gap-2 justify-between">
         <div className="flex items-center gap-2">
-          <Avatar className="w-14 h-14">
-            <AvatarImage src={session?.user?.image!} alt="profile" />
-            <AvatarFallback className="bg-primary text-white font-bold">
-              {session?.user?.name?.slice(0, 2).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
+          <AvatarUploadForm
+            username={session.user?.name!}
+            image={session.user?.image}
+            email={session.user.email!}
+          />
           <div>
             <h2 className=" font-semibold text-lg">{session?.user?.name}</h2>
             <p className="text-sm font-medium text-muted-foreground">
