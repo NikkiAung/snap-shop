@@ -19,3 +19,7 @@ export const avatarSchema = z.object({
     .optional(),
   email: z.string().email({ message: "Please enter a valid email" }),
 });
+
+export const deleteAccountSchema = z.object({
+  email: z.string().email({ message: "Please enter a valid email" }),
+});

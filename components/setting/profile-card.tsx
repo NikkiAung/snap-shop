@@ -1,15 +1,12 @@
 "use client";
 import { Session } from "next-auth";
 import React, { useState } from "react";
-import { Avatar, AvatarFallback } from "../ui/avatar";
-import { AvatarImage } from "@radix-ui/react-avatar";
 import { UserRoundPen } from "lucide-react";
 
 import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -19,7 +16,6 @@ import {
   DrawerClose,
   DrawerContent,
   DrawerDescription,
-  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
@@ -51,10 +47,15 @@ const ProfileCard = ({ session }: ProfileCardProps) => {
             email={session.user.email!}
           />
           <div>
-            <h2 className=" font-semibold text-lg">{session?.user?.name}</h2>
-            <p className="text-sm font-medium text-muted-foreground">
-              {session.user?.email}
-            </p>
+            <div className="flex flex-col gap-1">
+              <p className="text-muted-foreground text-lg">Display Name :</p>
+              <h2 className=" font-semibold text-lg">{session?.user?.name}</h2>
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <p className=" text-muted-foreground text-lg">Email :</p>
+              <p className="text-sm font-medium">{session.user?.email}</p>
+            </div>
           </div>
         </div>
         {isDesktop ? (

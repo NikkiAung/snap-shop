@@ -6,6 +6,7 @@ import { eq } from "drizzle-orm";
 import { users } from "../schema";
 import {
   avatarSchema,
+  deleteAccountSchema,
   settingSchema,
   twoFactorAuthSchema,
 } from "@/types/settings-schema";
@@ -55,4 +56,15 @@ export const profileAvatarUpdate = actionClient
     await db.update(users).set({ image }).where(eq(users.email, email));
     revalidatePath("/dashboard/settings");
     return { success: "Profile Updated" };
+  });
+
+export const deleteAccount = actionClient
+  .schema(deleteAccountSchema)
+  .action(async ({ parsedInput: { email } }) => {
+    const existingUser = await db.query.users.findFirst({
+      where: eq(users.email, email),
+    });
+    if (!existingUser) return { error: "Something went wrong" };
+    await db.delete(users).where(eq(users.email, email));
+    return { success: "Account Deleted" };
   });

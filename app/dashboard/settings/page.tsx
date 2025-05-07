@@ -1,4 +1,5 @@
 import ChangePassword from "@/components/setting/change-password";
+import DeleteAccount from "@/components/setting/delete-account";
 import ProfileCard from "@/components/setting/profile-card";
 import SettingsCard from "@/components/setting/setting-card";
 import TwoFactor from "@/components/setting/two-factor";
@@ -13,21 +14,19 @@ const Settings = async () => {
 
   return (
     <SettingsCard title="Settings" description="Manage your account settings">
-      <main className="flex flex-1 flex-col lg:flex-row gap-4">
-        <div className="flex-1">
-          <ProfileCard session={session} />
-        </div>
-        <div className="space-y-4 flex-1">
-          {!session.user.isOauth && (
-            <>
-              <ChangePassword email={session.user.email!} />
-              <TwoFactor
-                email={session?.user.email!}
-                isTwoFactorEnabled={session?.user.isTwofactorEnabled!}
-              />
-            </>
-          )}
-        </div>
+      <main className="flex flex-col gap-5">
+        <ProfileCard session={session} />
+
+        {!session.user.isOauth && (
+          <>
+            <ChangePassword email={session.user.email!} />
+            <TwoFactor
+              email={session?.user.email!}
+              isTwoFactorEnabled={session?.user.isTwofactorEnabled!}
+            />
+          </>
+        )}
+        <DeleteAccount email={session?.user.email!} />
       </main>
     </SettingsCard>
   );
