@@ -6,6 +6,7 @@ import {
   integer,
   pgEnum,
   boolean,
+  serial,
 } from "drizzle-orm/pg-core";
 import type { AdapterAccount } from "next-auth/adapters";
 import { createId } from "@paralleldrive/cuid2";
@@ -99,3 +100,11 @@ export const twoFactorTokes = pgTable(
     }),
   })
 );
+
+export const products = pgTable("products", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  price: integer("price").notNull(),
+  createdAt: timestamp("createdAt").defaultNow(),
+});
