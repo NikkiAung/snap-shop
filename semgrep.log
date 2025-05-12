@@ -1,0 +1,14 @@
+                                       
+                                       
+┌─────────────────────────────────────┐
+│ 1 Undetermined Supply Chain Finding │
+└─────────────────────────────────────┘
+                                    
+  [36m[22m[24m  package-lock.json[0m
+    ❯❱ esbuild - GHSA-67mh-4wv8-2f99
+          Severity: [1m[24mMODERATE[0m                                           
+          Affected versions of esbuild are vulnerable to Origin Validation Error.
+                                                                                 
+  [32m[22m[24m         ▶▶┆ Fixed for esbuild at version: 0.25.0[0m
+          530┆ "node_modules/@esbuild-kit/core-utils/node_modules/esbuild": {
+
