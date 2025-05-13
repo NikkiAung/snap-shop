@@ -7,6 +7,7 @@ import {
   pgEnum,
   boolean,
   serial,
+  real,
 } from "drizzle-orm/pg-core";
 import type { AdapterAccount } from "next-auth/adapters";
 import { createId } from "@paralleldrive/cuid2";
@@ -103,8 +104,8 @@ export const twoFactorTokes = pgTable(
 
 export const products = pgTable("products", {
   id: serial("id").primaryKey(),
-  name: text("name").notNull(),
   description: text("description").notNull(),
-  price: integer("price").notNull(),
-  createdAt: timestamp("createdAt").defaultNow(),
+  title: text("title").notNull(),
+  price: real("price").notNull(),
+  createdAt: timestamp("createdAt", { mode: "date" }).defaultNow(),
 });

@@ -23,8 +23,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { DollarSign } from "lucide-react";
 import Tiptap from "./tip-tap";
+import { useAction } from "next-safe-action/hooks";
+import { updateProduct } from "@/server/actions/products";
+import { toast } from "sonner";
+import { redirect, useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 const CreateProductForm = () => {
+  const router = useRouter();
   const form = useForm<z.infer<typeof productSchema>>({
     resolver: zodResolver(productSchema),
     defaultValues: {
@@ -33,10 +39,28 @@ const CreateProductForm = () => {
       price: 0,
     },
   });
+  const { execute, status, result } = useAction(updateProduct, {
+    onSuccess({ data }) {
+      form.reset();
+      if (data?.error) {
+        toast.error(data?.error);
+      }
+      if (data?.success) {
+        toast.success(data?.success);
+        form.reset();
+        router.push("/dashboard/products");
+      }
+    },
+  });
 
   function onSubmit(values: z.infer<typeof productSchema>) {
-    console.log(values);
+    const { title, id, description, price } = values;
+    execute({ title, id, description, price });
   }
+
+  useEffect(() => {
+    form.setValue("description", "");
+  }, [form]);
 
   return (
     <Card>
