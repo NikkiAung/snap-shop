@@ -11,9 +11,9 @@ import {
   Strikethrough,
   List,
   Heading1,
-  Heading2,
 } from "lucide-react";
 import { Toggle } from "@/components/ui/toggle";
+import { useEffect } from "react";
 type TiptapProps = {
   val: string;
 };
@@ -49,6 +49,10 @@ const Tiptap = ({ val }: TiptapProps) => {
       });
     },
   });
+
+  useEffect(() => {
+    if (editor?.isEmpty) editor.commands.setContent(val);
+  }, [val]);
 
   return (
     <div className="space-y-2">

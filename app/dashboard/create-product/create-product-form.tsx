@@ -3,7 +3,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -24,12 +23,15 @@ import { Input } from "@/components/ui/input";
 import { DollarSign } from "lucide-react";
 import Tiptap from "./tip-tap";
 import { useAction } from "next-safe-action/hooks";
-import { updateProduct } from "@/server/actions/products";
+import { getSingleProduct, updateProduct } from "@/server/actions/products";
 import { toast } from "sonner";
-import { redirect, useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const CreateProductForm = () => {
+  const searchParams = useSearchParams();
+  const isEditMode = searchParams.get("edit_id");
+  const [editProduct, setEditProduct] = useState<string>("");
   const router = useRouter();
   const form = useForm<z.infer<typeof productSchema>>({
     resolver: zodResolver(productSchema),
@@ -58,15 +60,41 @@ const CreateProductForm = () => {
     execute({ title, id, description, price });
   }
 
+  const isProductExist = async (id: number) => {
+    if (isEditMode) {
+      const response = await getSingleProduct(id);
+      if (response?.error) {
+        toast.error(response?.error);
+        router.push("/dashboard/products");
+        return;
+      }
+      if (response?.success) {
+        setEditProduct(response?.success?.title);
+        form.setValue("title", response?.success?.title);
+        form.setValue("description", response?.success?.description);
+        form.setValue("price", response?.success?.price);
+        form.setValue("id", response?.success?.id);
+      }
+    }
+  };
+
   useEffect(() => {
     form.setValue("description", "");
   }, [form]);
 
+  useEffect(() => {
+    if (isEditMode) {
+      isProductExist(Number(isEditMode));
+    }
+  }, []);
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Create Product</CardTitle>
-        <CardDescription>Create a new product</CardDescription>
+        <CardTitle>{editProduct ? "Update" : "Create"} Product</CardTitle>
+        <CardDescription>
+          {editProduct ? "Update an existing" : "Create a new"} Product
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -86,10 +114,10 @@ const CreateProductForm = () => {
             />
             <FormField
               control={form.control}
-              name="title"
+              name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Product title</FormLabel>
+                  <FormLabel>Product description</FormLabel>
                   <FormControl>
                     <Tiptap val={field.value} />
                   </FormControl>
@@ -102,7 +130,7 @@ const CreateProductForm = () => {
               name="price"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Product title</FormLabel>
+                  <FormLabel>Product price</FormLabel>
                   <FormControl>
                     <div className="flex items-center gap-2">
                       <DollarSign
@@ -121,8 +149,12 @@ const CreateProductForm = () => {
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full">
-              Submit
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={status === "executing"}
+            >
+              {editProduct ? "Update" : "Create A"} Product
             </Button>
           </form>
         </Form>

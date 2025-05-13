@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontalIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type Payment = {
@@ -64,7 +65,8 @@ export const columns: ColumnDef<Payment>[] = [
   {
     accessorKey: "actions",
     header: "Actions",
-    cell: () => {
+    cell: ({ row }) => {
+      const product = row.original;
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -76,7 +78,9 @@ export const columns: ColumnDef<Payment>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem className="cursor-pointer text-primary focus:bg-primary/20 focus:text-primary font-medium duration-300">
-              Edit Product
+              <Link href={`/dashboard/create-product?edit_id=${product.id}`}>
+                Edit Product
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuItem className="cursor-pointer text-red-600 focus:bg-red-200 focus:text-red-600 font-medium duration-300">
               Delete Product
