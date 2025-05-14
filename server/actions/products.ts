@@ -6,6 +6,7 @@ import { productSchema } from "@/types/product-schema";
 import { actionClient } from "./safe-action";
 import { products } from "../schema";
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
 
 export const updateProduct = actionClient
   .schema(productSchema)
@@ -49,3 +50,19 @@ export const getSingleProduct = async (id: number) => {
     return { error: "Something went wrong" };
   }
 };
+
+const deleteProductSchema = z.object({
+  id: z.number(),
+});
+
+export const deleteProduct = actionClient
+  .schema(deleteProductSchema)
+  .action(async ({ parsedInput: { id } }) => {
+    try {
+      await db.delete(products).where(eq(products.id, id));
+      revalidatePath("/dashboard/products");
+      return { success: "Product deleted successfully" };
+    } catch (error) {
+      return { error: "Something went wrong" };
+    }
+  });

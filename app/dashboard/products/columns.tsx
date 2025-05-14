@@ -1,6 +1,6 @@
 "use client";
 
-import { ColumnDef } from "@tanstack/react-table";
+import { ColumnDef, Row } from "@tanstack/react-table";
 import Image from "next/image";
 import {
   DropdownMenu,
@@ -12,9 +12,13 @@ import {
 import { MoreHorizontalIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useAction } from "next-safe-action/hooks";
+import { deleteProduct } from "@/server/actions/products";
+import { toast } from "sonner";
+// import { VariantsWithImagesTags } from "@/lib/inter-types";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-export type Payment = {
+export type Product = {
   id: number;
   price: number;
   title: string;
@@ -23,7 +27,45 @@ export type Payment = {
   variants: any;
 };
 
-export const columns: ColumnDef<Payment>[] = [
+const ActionShell = (row: Row<Product>) => {
+  const product = row.original;
+  const { execute } = useAction(deleteProduct, {
+    onSuccess: ({ data }) => {
+      if (data?.error) {
+        toast.error(data.error);
+      }
+      if (data?.success) {
+        toast.success(data.success);
+      }
+    },
+  });
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="h-8 w-8 p-0">
+          <span className="sr-only">Open menu</span>
+          <MoreHorizontalIcon className="h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+        <DropdownMenuItem className="cursor-pointer text-primary focus:bg-primary/20 focus:text-primary font-medium duration-300">
+          <Link href={`/dashboard/create-product?edit_id=${product.id}`}>
+            Edit Product
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          className="cursor-pointer text-red-600 focus:bg-red-200 focus:text-red-600 font-medium duration-300"
+          onClick={() => execute({ id: product.id })}
+        >
+          Delete Product
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
+
+export const columns: ColumnDef<Product>[] = [
   {
     accessorKey: "id",
     header: "ID",
@@ -66,28 +108,7 @@ export const columns: ColumnDef<Payment>[] = [
     accessorKey: "actions",
     header: "Actions",
     cell: ({ row }) => {
-      const product = row.original;
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontalIcon className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem className="cursor-pointer text-primary focus:bg-primary/20 focus:text-primary font-medium duration-300">
-              <Link href={`/dashboard/create-product?edit_id=${product.id}`}>
-                Edit Product
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer text-red-600 focus:bg-red-200 focus:text-red-600 font-medium duration-300">
-              Delete Product
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
+      return ActionShell(row);
     },
   },
 ];
