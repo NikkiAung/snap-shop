@@ -9,13 +9,14 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MoreHorizontalIcon } from "lucide-react";
+import { CirclePlus, MoreHorizontalIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useAction } from "next-safe-action/hooks";
 import { deleteProduct } from "@/server/actions/products";
 import { toast } from "sonner";
 import { VariantsWithImagesTags } from "@/lib/inter-types";
+import VariantDialog from "./variant-dialog";
 // import { VariantsWithImagesTags } from "@/lib/inter-types";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -83,6 +84,21 @@ export const columns: ColumnDef<Product>[] = [
   {
     accessorKey: "variants",
     header: "Variants",
+    cell: ({ row }) => {
+      const variants = row.getValue("variants") as VariantsWithImagesTags[];
+      return (
+        <div>
+          {variants.map((variant) => (
+            <div key={variant.id}>
+              <p>{variant.color}</p>
+            </div>
+          ))}
+          <VariantDialog editMode={false}>
+            <CirclePlus className="w-5 h-5 text-gray-500 hover:text-black duration-200 cursor-pointer" />
+          </VariantDialog>
+        </div>
+      );
+    },
   },
   {
     accessorKey: "title",
