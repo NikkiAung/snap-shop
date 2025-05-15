@@ -15,6 +15,7 @@ import Link from "next/link";
 import { useAction } from "next-safe-action/hooks";
 import { deleteProduct } from "@/server/actions/products";
 import { toast } from "sonner";
+import { VariantsWithImagesTags } from "@/lib/inter-types";
 // import { VariantsWithImagesTags } from "@/lib/inter-types";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -24,7 +25,7 @@ export type Product = {
   title: string;
   description: string;
   image: string;
-  variants: any;
+  variants: VariantsWithImagesTags[];
 };
 
 const ActionShell = (row: Row<Product>) => {
