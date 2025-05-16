@@ -16,7 +16,7 @@ import { useAction } from "next-safe-action/hooks";
 import { deleteProduct } from "@/server/actions/products";
 import { toast } from "sonner";
 import { VariantsWithImagesTags } from "@/lib/inter-types";
-import VariantDialog from "./variant-dialog";
+import VariantDialog from "../../../components/products/variant-dialog";
 // import { VariantsWithImagesTags } from "@/lib/inter-types";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
