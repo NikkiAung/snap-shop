@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { VariantsWithImagesTags } from "@/lib/inter-types";
 import {
   Dialog,
@@ -26,6 +26,9 @@ import { Input } from "@/components/ui/input";
 import { VariantSchema } from "@/types/variant-schema";
 import TagsInput from "./tags-input";
 import VariantImages from "./variant-images";
+import { useAction } from "next-safe-action/hooks";
+import { toast } from "sonner";
+import { createVariant } from "@/server/actions/variants";
 
 type VariantDialogProps = {
   children: React.ReactNode;
@@ -40,12 +43,13 @@ const VariantDialog = ({
   productID,
   variant,
 }: VariantDialogProps) => {
+  const [open, setOpen] = useState(false);
   const form = useForm<z.infer<typeof VariantSchema>>({
     resolver: zodResolver(VariantSchema),
     defaultValues: {
       tags: [],
       variantImages: [],
-      color: "#000",
+      color: "#000000",
       productID,
       id: undefined,
       productType: "Black",
@@ -53,13 +57,38 @@ const VariantDialog = ({
     },
   });
 
+  const { execute, status, result } = useAction(createVariant, {
+    onSuccess({ data }) {
+      if (data?.error) {
+        toast.error(data?.error);
+        form.reset();
+      }
+      if (data?.success) {
+        toast.success(data?.success);
+        setOpen(false);
+        form.reset();
+      }
+    },
+  });
+
   function onSubmit(values: z.infer<typeof VariantSchema>) {
-    console.log(values);
+    // console.log(values);
+    const { color, tags, id, variantImages, editMode, productID, productType } =
+      values;
+    execute({
+      color,
+      tags,
+      id,
+      variantImages,
+      editMode,
+      productID,
+      productType,
+    });
   }
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>{children}</DialogTrigger>
-      <DialogContent>
+      <DialogContent className="h-[40rem] overflow-scroll">
         <DialogHeader>
           <DialogTitle>
             {editMode ? "Update an existing" : "Create new"} product's variant
