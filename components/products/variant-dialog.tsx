@@ -25,6 +25,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { VariantSchema } from "@/types/variant-schema";
 import TagsInput from "./tags-input";
+import VariantImages from "./variant-images";
 
 type VariantDialogProps = {
   children: React.ReactNode;
@@ -112,6 +113,7 @@ const VariantDialog = ({
                 </FormItem>
               )}
             />
+            <VariantImages />
             <Button type="submit" className="w-full">
               {editMode
                 ? "Update product's variant"
