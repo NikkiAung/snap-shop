@@ -107,7 +107,7 @@ export const columns: ColumnDef<Product>[] = [
                 variant={v}
               >
                 <div
-                  className="w-5 h-5 rounded-full"
+                  className="w-5 h-5 rounded-full cursor-pointer"
                   style={{ backgroundColor: v.color }}
                 />
               </VariantDialog>
