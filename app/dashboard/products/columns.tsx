@@ -99,12 +99,13 @@ export const columns: ColumnDef<Product>[] = [
       const variants = row.getValue("variants") as VariantsWithImagesTags[];
       return (
         <div className="flex gap-1">
-          {variants.map((v) => {
+          {variants.map((v, i) => {
             return (
               <VariantDialog
                 editMode={true}
                 productID={row.original.id}
                 variant={v}
+                key={i}
               >
                 <div
                   className="w-5 h-5 rounded-full cursor-pointer"
