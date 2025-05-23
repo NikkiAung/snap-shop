@@ -4,6 +4,7 @@ import { db } from "@/server";
 import { productVariants } from "@/server/schema";
 import { eq } from "drizzle-orm";
 import React from "react";
+import ImageSlider from "@/components/products/image-slider";
 
 type SingleProductProps = {
   params: {
@@ -47,35 +48,44 @@ const SingleProduct = async ({ params }: SingleProductProps) => {
   return (
     <div>
       {productWithVariants && (
-        <main>
-          <div>
-            <h2 className="font-bold text-2xl">
-              {productWithVariants.product.title}
-            </h2>
-            <p className="text-xs bg-gray-200 font-medium w-fit p-1 rounded-md my-2">
-              {productWithVariants.productType} Variant
-            </p>
-            <div
-              dangerouslySetInnerHTML={{
-                __html: productWithVariants.product.description,
-              }}
+        <main className="flex">
+          <div className="flex-1">
+            <ImageSlider
+              variants={productWithVariants.product.productVariants}
             />
           </div>
-          <p className="text-2xl font-bold my-2">
-            {formatCurrency(productWithVariants.product.price)}
-          </p>
-          <div className="flex gap-2 items-center">
-            <p className="font-medium">Colors :</p>
-            {productWithVariants.product.productVariants.map((v) => (
-              <VariantPicker
-                key={v.id}
-                {...v}
-                title={productWithVariants.product.title}
-                price={productWithVariants.product.price}
-                image={v.variantImages[0].image_url}
-                productId={v.productID}
+          <div className="flex-1">
+            <div>
+              <h2 className="font-bold text-2xl">
+                {productWithVariants.product.title}
+              </h2>
+              <p className="text-xs bg-gray-200 font-medium w-fit p-1 rounded-md my-2">
+                {productWithVariants.productType} Variant
+              </p>
+              <hr className="mb-4 mt-3" />
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: productWithVariants.product.description,
+                }}
+                className="leading-7"
               />
-            ))}
+            </div>
+            <p className="text-2xl font-bold my-2">
+              {formatCurrency(productWithVariants.product.price)}
+            </p>
+            <div className="flex gap-2 items-center">
+              <p className="font-medium">Colors :</p>
+              {productWithVariants.product.productVariants.map((v) => (
+                <VariantPicker
+                  key={v.id}
+                  {...v}
+                  title={productWithVariants.product.title}
+                  price={productWithVariants.product.price}
+                  image={v.variantImages[0].image_url}
+                  productId={v.productID}
+                />
+              ))}
+            </div>
           </div>
         </main>
       )}
