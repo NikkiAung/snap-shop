@@ -48,13 +48,13 @@ const SingleProduct = async ({ params }: SingleProductProps) => {
   return (
     <div>
       {productWithVariants && (
-        <main className="flex">
-          <div className="flex-1">
+        <main className="flex gap-4 mt-6 flex-col lg:flex-row pb-6">
+          <div className="lg:flex-1">
             <ImageSlider
               variants={productWithVariants.product.productVariants}
             />
           </div>
-          <div className="flex-1">
+          <div className="lg:flex-1">
             <div>
               <h2 className="font-bold text-2xl">
                 {productWithVariants.product.title}
