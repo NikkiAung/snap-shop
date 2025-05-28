@@ -5,6 +5,7 @@ import { productVariants } from "@/server/schema";
 import { eq } from "drizzle-orm";
 import React from "react";
 import ImageSlider from "@/components/products/image-slider";
+import AddToCart from "@/components/cart/add-to-cart";
 
 type SingleProductProps = {
   params: {
@@ -86,6 +87,7 @@ const SingleProduct = async ({ params }: SingleProductProps) => {
                 />
               ))}
             </div>
+            <AddToCart />
           </div>
         </main>
       )}
