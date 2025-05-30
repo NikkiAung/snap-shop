@@ -15,6 +15,7 @@ type PaymentFormProps = {
 const PaymentForm = ({ totalPrice }: PaymentFormProps) => {
   const cart = useCartStore((state) => state.cart);
   const setCartPosition = useCartStore((state) => state.setCartPosition);
+
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const stripe = useStripe();
@@ -36,7 +37,7 @@ const PaymentForm = ({ totalPrice }: PaymentFormProps) => {
     }
 
     const repsonse = await processPaymant({
-      amount: totalPrice,
+      amount: totalPrice * 100,
       currency: "usd",
       cart: cart.map((ci) => ({
         quantity: ci.variant.quantity,
@@ -70,8 +71,8 @@ const PaymentForm = ({ totalPrice }: PaymentFormProps) => {
         return;
       } else {
         setLoading(false);
-        console.log("Order is on the way.");
         setCartPosition("Success");
+        console.log("Order is on the way.");
       }
     }
   };

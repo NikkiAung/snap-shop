@@ -20,6 +20,7 @@ export type CartType = {
   removeFromCart: (item: CartItem) => void;
   cartPosition: "Order" | "Checkout" | "Success";
   setCartPosition: (position: "Order" | "Checkout" | "Success") => void;
+  clearCart: () => void;
 };
 
 export const useCartStore = create(
@@ -27,6 +28,7 @@ export const useCartStore = create(
     (set) => ({
       cart: [],
       cartPosition: "Order",
+      clearCart: () => set(() => ({ cart: [] })),
       setCartPosition: (position) => set(() => ({ cartPosition: position })),
       addToCart: (item) =>
         set((state) => {

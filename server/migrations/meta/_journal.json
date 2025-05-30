@@ -71,6 +71,13 @@
       "when": 1748481024322,
       "tag": "0009_wealthy_sway",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1748580759929,
+      "tag": "0010_misty_shadow_king",
+      "breakpoints": true
     }
   ]
 }
