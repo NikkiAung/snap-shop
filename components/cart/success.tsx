@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Button } from "../ui/button";
 import { PartyPopper } from "lucide-react";
 import { useCartStore } from "@/store/cart-store";
+import Link from "next/link";
 
 const Success = () => {
   const setCartPosition = useCartStore((state) => state.setCartPosition);
@@ -22,8 +23,9 @@ const Success = () => {
       <p className="text-sm font-medium text-muted-foreground mb-4">
         Thank you for your purchase
       </p>
-      <Button className="mx-auto" onClick={() => setCartPosition("Order")}>
-        View orders
+      <Button className="mx-auto" asChild>
+        Add commentMore actions
+        <Link href="/dashboard/orders">View orders</Link>
       </Button>
     </main>
   );

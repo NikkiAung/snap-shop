@@ -10,6 +10,7 @@ import { processPaymant } from "@/server/actions/payment";
 import { useCartStore } from "@/store/cart-store";
 import { useAction } from "next-safe-action/hooks";
 import { createOrder } from "@/server/actions/order";
+import { toast } from "sonner";
 
 type PaymentFormProps = {
   totalPrice: number;
@@ -28,6 +29,7 @@ const PaymentForm = ({ totalPrice }: PaymentFormProps) => {
       if (data?.error) {
       }
       if (data?.success) {
+        toast.success(data.success);
         setCartPosition("Success");
       }
     },
