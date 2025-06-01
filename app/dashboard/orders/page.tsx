@@ -85,7 +85,7 @@ const Orders = async () => {
                   </TableCell>
                   <TableCell className="text-right">
                     <Dialog>
-                      <DialogTrigger className="underline">
+                      <DialogTrigger className="underline cursor-pointer">
                         View Details
                       </DialogTrigger>
                       <DialogContent className="max-w-3xl">
