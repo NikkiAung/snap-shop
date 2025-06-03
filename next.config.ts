@@ -13,6 +13,7 @@ const nextConfig: NextConfig = {
     ],
   },
   env: {
+    // required if nextJS itself couldn't find it
     DRIZZLE_DATABASE_URL: process.env.DRIZZLE_DATABASE_URL,
   },
 };
