@@ -1,5 +1,6 @@
 import { db } from "@/server";
 import Products from "@/components/products/index";
+import SearchBox from "@/components/products/search-box";
 export default async function Home() {
   const productwithVariants = await db.query.productVariants.findMany({
     with: {
@@ -10,7 +11,7 @@ export default async function Home() {
   });
   return (
     <main>
-      <h2>Nav</h2>
+      <SearchBox productWithVariants={productwithVariants} />
       <Products productWithVariants={productwithVariants} />
     </main>
   );
