@@ -24,7 +24,6 @@ const Success = () => {
         Thank you for your purchase
       </p>
       <Button className="mx-auto" asChild>
-        Add commentMore actions
         <Link href="/dashboard/orders">View orders</Link>
       </Button>
     </main>
