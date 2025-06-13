@@ -51,7 +51,7 @@ export const EmailComfirimationTemplate = ({
 
 EmailComfirimationTemplate.PreviewProps = {
   userFirstname: "SnapShop",
-  comfirmEmailLink: "https://codehubmm.com",
+  comfirmEmailLink: "https://nikkiaung.github.io/Personal-Portfolio-Web/",
 } as EmailComfirmationTemplateProps;
 
 export default EmailComfirimationTemplate;
