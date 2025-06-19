@@ -8,6 +8,10 @@ Snap-Shop is a comprehensive e-commerce web application built with Next.js, desi
 
 #### **Project Demo** : [e-commerce web Vd Demo](https://drive.google.com/file/d/16BOw26JqHRnalH7-1NAL09g2pWOS98IK/view?usp=sharing)
 
+#### **Home Page**
+
+![Snap-Shop Demo Screenshot](./public/demo.png)
+
 ## Features 👾
 
 - **User Authentication:** Secure login, registration, and password reset functionalities.
