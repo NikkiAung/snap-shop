@@ -12,7 +12,7 @@ const ProviderLogin = () => {
         variant={"outline"}
         onClick={() =>
           signIn("google", {
-            redirect: false,
+            // redirect: false,
             callbackUrl: "/",
           })
         }
@@ -25,7 +25,7 @@ const ProviderLogin = () => {
         variant={"outline"}
         onClick={() =>
           signIn("github", {
-            redirect: false,
+            // redirect: false,
             callbackUrl: "/",
           })
         }
